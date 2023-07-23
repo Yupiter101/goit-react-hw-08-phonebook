@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchContacts, addContact, deleteContact } from "./operations";
+import { getContacts, addContact, deleteContact, updateContact } from "./operations";
 
 
 const initContactsState = {
@@ -39,6 +39,18 @@ const handleFulfilledDel = (state, action) => {
   handleFulfilled(state);
 };
 
+const handleFulfilledUp = (state, action) => {
+  state.items.map(item => {
+    if (item.id !== action.payload.id) {
+    return item
+    } 
+    item.name = action.payload.name;
+    item.number = action.payload.number;
+    return item
+  })
+  handleFulfilled(state);
+};
+
 
 
 
@@ -50,9 +62,9 @@ export const contactSlice = createSlice({
   
   extraReducers: (builder) => {
     builder
-      .addCase(fetchContacts.pending, handlePending)
-      .addCase(fetchContacts.fulfilled, handleFulfilledGet)
-      .addCase(fetchContacts.rejected, handleRejected)
+      .addCase(getContacts.pending, handlePending)
+      .addCase(getContacts.fulfilled, handleFulfilledGet)
+      .addCase(getContacts.rejected, handleRejected)
 
       .addCase(addContact.pending, handlePending)
       .addCase(addContact.fulfilled, handleFulfilledAdd)
@@ -61,5 +73,9 @@ export const contactSlice = createSlice({
       .addCase(deleteContact.pending, handlePending)
       .addCase(deleteContact.fulfilled, handleFulfilledDel)
       .addCase(deleteContact.rejected, handleRejected)
+
+      .addCase(updateContact.pending, handlePending)
+      .addCase(updateContact.fulfilled, handleFulfilledUp)
+      .addCase(updateContact.rejected, handleRejected)
   }
 });

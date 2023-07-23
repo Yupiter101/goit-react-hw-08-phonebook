@@ -1,44 +1,64 @@
-
-
 import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from "redux/operations";
-import { getError, getIsLoading } from "redux/selectors";
+import { Routes, Route } from "react-router-dom";
 
-import {ContactForm} from "./ContactForm/ContactForm";
-import {Filter} from "./Filter/Filter";
-import {ContactList} from "./ContactList/ContactList";
+import Layout from "./Layout/Layout";
+import Home from "pages/Home";
+import Contacts from "pages/Contacts";
+import Register from "pages/Register";
+import Login from "pages/Login";
+
+import { selectRefreshing } from "redux/selectors";
+import { PrivateRoute } from "./PrivateRoute";
+import { RestrictedRoute } from "./RestrictedRoute";
+import { refreshUser } from "redux/authOperations";
+
 
 
 
 export function App() {
 
-  const isError = useSelector(getError);
-  const isLoading = useSelector(getIsLoading);
   const dispatch = useDispatch();
+  const isRefreshing = useSelector(selectRefreshing);
 
-  useEffect(() => { 
-    dispatch(fetchContacts()) 
-  }, [dispatch])
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
 
 
 
-  if(isError) {
-    return (
-      <>
-        <h1>Error. Sorry, something went wrong</h1>
-      </>
-    )
+  if(isRefreshing) {
+    <div><h2>Refreshing...</h2></div>
+    return
   }
 
   return (
-      <div className="Container">
-        <h1>Phonebook</h1>
-        <ContactForm />
-        <h2 style={{color: isLoading ? 'blue' : 'black'}}>
-          {isLoading ? 'Loading. . . . .' : 'Contacts'}</h2>
-        <Filter />
-        <ContactList />  
+      <div className="container">
+        <Routes >
+        <Route path="/" element={<Layout/>}>
+
+          <Route index element={<Home />} />
+
+          <Route path="contacts" 
+            element={<PrivateRoute redirectTo="/login" component={<Contacts />} />} />
+
+          <Route path="register" 
+            element={<RestrictedRoute  redirectTo="/contacts"  component={<Register />}/>} />
+
+          <Route path="login" 
+            element={<RestrictedRoute  redirectTo="/contacts"  component={<Login />}/>} />   
+          
+        </Route>
+      </Routes>  
+
       </div>
   )
 }
+
+ // if(isError) {
+  //   return (
+  //     <>
+  //       <h1>Error. Sorry, something went wrong</h1>
+  //     </>
+  //   )
+  // }

@@ -1,7 +1,7 @@
-import React from "react";
+// import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 // import { nanoid } from 'nanoid';
-import { getContacts } from "redux/selectors";
+import { selectContacts } from "redux/selectors";
 import { addContact } from "redux/operations";
 import css from "./ContactForm.module.css";
 
@@ -10,7 +10,7 @@ import css from "./ContactForm.module.css";
 export function ContactForm() {
 
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
 
   const handleSubmit = (event) => {

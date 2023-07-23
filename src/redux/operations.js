@@ -2,29 +2,38 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-axios.defaults.baseURL='https://64b4f2e1f3dbab5a95c65cb1.mockapi.io';
 
+// ===== Contacts operations ========
 
-export const fetchContacts = createAsyncThunk('contacts/fetchAll',
-  async (_, {rejectWithValue}) => {
+// GET
+export const getContacts = createAsyncThunk('contacts/fetchAll',
+  async (_, thunkAPI) => {
+
+    // const state = thunkAPI.getState();
+    // if (state.auth.token === null) {
+    //   return thunkAPI.rejectWithValue('No token');
+    // }
+
       try {
           const response = await axios.get('/contacts');
+          console.log('GET contacts');
           return  response.data;
       } catch (error) {
-           return  rejectWithValue(error.message);
+           return  thunkAPI.rejectWithValue(error.message);
       }
   }
 )
 
 
 export const addContact = createAsyncThunk( 'contacts/addContact',
-  async (contact, {rejectWithValue}) => {
+  async (contact, thunkAPI) => {
+
       try {
           const response = await axios.post('/contacts', contact );
           console.log('added succesfull');
           return  response.data;
       } catch (error) {
-        return  rejectWithValue(error.message)
+        return  thunkAPI.rejectWithValue(error.message)
       }
   }
 )
@@ -35,7 +44,7 @@ export const deleteContact = createAsyncThunk('contacts/deleteContact',
       try {
           const response = await axios.delete(`/contacts/${id}`)
           console.log('Сontact was deleted');
-          return  response.data
+          return  response.data;
       } catch (error) {
         return  thunkAPI.rejectWithValue(error.message)
       }
@@ -43,5 +52,18 @@ export const deleteContact = createAsyncThunk('contacts/deleteContact',
 )
 
 
+export const updateContact = createAsyncThunk('contacts/updateContact',
+  async ({ itemId, contact }, thunkAPI) => {
+      try {
+          const response = await axios.patch(`/contacts/${itemId}`, contact)
+          console.log('Сontact was updated');
+          return  response.data;
+      } catch (error) {
+        console.log('Не могу обновить');
+        return  thunkAPI.rejectWithValue(error.message)
+      }
+  }
+)
 
-// axios.defaults.baseURL='https://64b4f2e1f3dbab5a95c65cb1.mockapi.io/contacts'
+
+

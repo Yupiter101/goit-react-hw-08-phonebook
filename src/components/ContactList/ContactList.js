@@ -1,7 +1,8 @@
-
+import { useState } from 'react';
 import { ContactItem } from "components/ContactItem/ContactItem";
 import { useSelector } from "react-redux";
-import { getContacts, getFilter } from "redux/selectors";
+import { selectContacts, selectFilter } from "redux/selectors";
+import { Modal } from "components/Modal/Modal";
 import css from "./ContactList.module.css";
 
 
@@ -12,15 +13,32 @@ const getVisibleContacts = (contacts, filter) => {
 
 export function ContactList () {
  
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
   const visibleContacts = getVisibleContacts(contacts, filter);
 
+  // Modal
+  const [isModal, setIsModal] = useState(false);
+  const [updateId, setUpdateId] = useState('');
+
+  const openModal = (itemId) => {
+    setIsModal(true);
+    setUpdateId(itemId);
+  }
+
+  const closeModal = () => {
+    setIsModal(false);
+  }
+
   return(
-    <ul className={css.ContactList}>
-      {visibleContacts.map(contact=> {
-        return <ContactItem key={contact.id} contactItem={contact}/>
-      })}
-    </ul>
+    <div>
+        <ul className={css.ContactList}>
+          {visibleContacts.map(contact=> {
+          return <ContactItem key={contact.id} contactItem={contact} openModal={openModal}/>
+        })}
+      </ul>
+      {isModal && <Modal onCloseModal={closeModal} itemId={updateId}/> }
+    </div>
+    
   )
 }

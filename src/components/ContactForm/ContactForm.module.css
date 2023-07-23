@@ -1,7 +1,10 @@
 
 .FormContact {
   outline: 1px solid black;
-  background-color: bisque;
+  border-radius: 5px;
+  width: 300px;
+  /* background-color: bisque; */
+  margin: 0 auto;
   padding-bottom: 20px;
   padding-top: 10px;
   margin-bottom: 50px;
@@ -11,7 +14,7 @@
 .InputContact {
   display: block;
   min-width: 200px;
-  margin: 5px auto 30px;
+  margin: 5px auto 25px;
   height: 30px;
   border-radius: 4px;
 }
