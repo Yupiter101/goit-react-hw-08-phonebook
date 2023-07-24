@@ -19,7 +19,7 @@ export function ContactItem({ contactItem, openModal }) {
 
   const handleUpdate = () => {
     console.log('itemId', id);
-    openModal(id);
+    openModal(contactItem);
   }
 
   return (

@@ -13,7 +13,7 @@ const modalRoot = document.querySelector('#modal-root');
 
 
 
-export function Modal({onCloseModal, itemId}) {
+export function Modal({onCloseModal, item}) {
 
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
@@ -63,7 +63,8 @@ export function Modal({onCloseModal, itemId}) {
       number: number.value,
     }
     console.log('contact', contact);
-    console.log('id', itemId);
+    console.log('id', item);
+    const itemId = item.id;
     dispatch(updateContact({ itemId, contact }));
     event.target.reset();
     onCloseModal();
@@ -86,12 +87,14 @@ export function Modal({onCloseModal, itemId}) {
                 type="text"
                 name="name"
                 title="Name may contain only letters"
+                placeholder={item.name}
                 required/>
             </label>
             <label className={css.LabelContact}> Number
               <input className={css.InputContact}
                 type="tel"
                 name="number"
+                placeholder={item.number}
                 required/>
             </label>
             <button className={css.BtnContact} type="submit">update</button>

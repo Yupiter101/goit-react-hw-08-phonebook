@@ -21,9 +21,9 @@ export function ContactList () {
   const [isModal, setIsModal] = useState(false);
   const [updateId, setUpdateId] = useState('');
 
-  const openModal = (itemId) => {
+  const openModal = (item) => {
     setIsModal(true);
-    setUpdateId(itemId);
+    setUpdateId(item);
   }
 
   const closeModal = () => {
@@ -37,7 +37,7 @@ export function ContactList () {
           return <ContactItem key={contact.id} contactItem={contact} openModal={openModal}/>
         })}
       </ul>
-      {isModal && <Modal onCloseModal={closeModal} itemId={updateId}/> }
+      {isModal && <Modal onCloseModal={closeModal} item={updateId}/> }
     </div>
     
   )
